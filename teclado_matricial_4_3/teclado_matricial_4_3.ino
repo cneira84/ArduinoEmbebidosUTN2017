@@ -1,0 +1,49 @@
+const byte Filas = 4; //constante para filas
+const byte Cols = 3; //constante para columnas
+
+byte Pins_Filas[] = {24, 26, 28, 30}; //Nros de pins de filas
+byte Pins_Cols[] = {39, 41, 43}; //Nros de pins de columnas
+
+byte i=0, Nro_Fila=0, Nro_Col = 0, estado = 0, j=0;
+
+char Teclas [ Filas ][ Cols ] =
+    {
+        {'1','2','3'},
+        {'4','5','6'},
+        {'7','8','9'},
+        {'*','0','#'}
+     };
+
+void setup() {
+  Serial.begin(9600) ;  //Defino la salida para ver el output
+  for (i=0; i < Filas;i++){ //Defino los pines de filas como entrada
+    pinMode(Pins_Filas[i], INPUT);
+  }
+  for (i=0; i < Cols;i++){ //Defino los pines de columnas como salida
+    pinMode(Pins_Cols[i], OUTPUT);
+  }
+}
+
+void loop() {
+  estado = 0; 
+  Nro_Fila = 255;
+  Nro_Col = 255;//Coloco un valor limite para detectar cuando no hay teclas presionadas
+  for (i=0; i < Cols;i++){ //Inicializo las columnas
+    digitalWrite(Pins_Cols[i], HIGH);
+  }
+  for (i=0; i < Cols;i++){
+    digitalWrite(Pins_Cols[i], LOW); //Seteo el indice verificador
+    for (j=0; j < Filas;j++){ //Recorro las filas buscando 
+      estado = digitalRead(Pins_Filas[j]);
+      if (estado == 0){ //Si esta en contacto guardo el nro de columna y fila
+        Nro_Col=i;
+        Nro_Fila=j;
+        }
+      delay(10);
+      }
+    digitalWrite(Pins_Cols[i],HIGH); //Vuelvo a estado 0 la columna
+  }
+  if (Nro_Fila != 255 && Nro_Col != 255){ //Verifico si tengo alguna tecla pulsada
+   Serial.println(Teclas[Nro_Fila][Nro_Col]);
+    }
+}
