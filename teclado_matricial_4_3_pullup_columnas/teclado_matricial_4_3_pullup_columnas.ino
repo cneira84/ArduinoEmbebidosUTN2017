@@ -29,19 +29,19 @@ void loop() {
   Nro_Fila = 255;
   Nro_Col = 255;//Coloco un valor limite para detectar cuando no hay teclas presionadas
   for (i=0; i < Cols;i++){ //Inicializo las columnas
-    digitalWrite(Pins_Cols[i], LOW);
+    digitalWrite(Pins_Cols[i], HIGH);
   }
   for (i=0; i < Cols;i++){
-    digitalWrite(Pins_Cols[i], HIGH); //Seteo el indice verificador
+    digitalWrite(Pins_Cols[i], LOW); //Seteo el indice verificador
     for (j=0; j < Filas;j++){ //Recorro las filas buscando 
       estado = digitalRead(Pins_Filas[j]);
-      if (estado == 1){ //Si esta en contacto guardo el nro de columna y fila
+      if (estado == 0){ //Si esta en contacto guardo el nro de columna y fila
         Nro_Col=i;
         Nro_Fila=j;
         }
       delay(10);
       }
-    digitalWrite(Pins_Cols[i],LOW); //Vuelvo a estado 0 la columna
+    digitalWrite(Pins_Cols[i],HIGH); //Vuelvo a estado 0 la columna
   }
   if (Nro_Fila != 255 && Nro_Col != 255){ //Verifico si tengo alguna tecla pulsada
    Serial.println(Teclas[Nro_Fila][Nro_Col]);

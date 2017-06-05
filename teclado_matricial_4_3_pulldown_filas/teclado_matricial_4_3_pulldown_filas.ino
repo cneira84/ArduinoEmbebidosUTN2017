@@ -16,6 +16,18 @@ char Teclas [ Filas ][ Cols ] =
 
 void setup() {
   Serial.begin(9600) ;  //Defino la salida para ver el output
+  setupTeclado();
+}
+
+void loop() {
+  inicializoTeclado();
+  lecturaTeclado();
+  if (Nro_Fila != 255 && Nro_Col != 255){ //Verifico si tengo alguna tecla pulsada
+   Serial.println(Teclas[Nro_Fila][Nro_Col]);
+    }
+}
+
+void setupTeclado(){
   for (i=0; i < Filas;i++){ //Defino los pines de filas como entrada
     pinMode(Pins_Filas[i], INPUT);
   }
@@ -24,13 +36,16 @@ void setup() {
   }
 }
 
-void loop() {
+void inicializoTeclado(){
   estado = 0; 
   Nro_Fila = 255;
   Nro_Col = 255;//Coloco un valor limite para detectar cuando no hay teclas presionadas
   for (i=0; i < Cols;i++){ //Inicializo las columnas
-    digitalWrite(Pins_Cols[i], LOW);
-  }
+  digitalWrite(Pins_Cols[i], LOW);
+  }  
+}
+
+void lecturaTeclado(){
   for (i=0; i < Cols;i++){
     digitalWrite(Pins_Cols[i], HIGH); //Seteo el indice verificador
     for (j=0; j < Filas;j++){ //Recorro las filas buscando 
@@ -43,7 +58,4 @@ void loop() {
       }
     digitalWrite(Pins_Cols[i],LOW); //Vuelvo a estado 0 la columna
   }
-  if (Nro_Fila != 255 && Nro_Col != 255){ //Verifico si tengo alguna tecla pulsada
-   Serial.println(Teclas[Nro_Fila][Nro_Col]);
-    }
 }
